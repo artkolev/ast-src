@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace app\controllers;
 
 use app\components\DeepController;
@@ -135,17 +137,6 @@ class SiteController extends DeepController
                 'cssInline' => $post['cssline'], // '.pageframe {width: 681px;height: 993px;background: url(/img/pdf-certificate/cert_frame.jpg);}.header td {padding: 35px;padding-bottom: 0;}.header_info {width: 180px;color: #6c81be;font-size: 13px;}.main {padding-top: 50px;padding-left: 105px;height: 500px;}.h1 {margin-top: 0;margin-bottom: 23px;color: #af8c4b;font-size: 49px;line-height: 120%;font-weight: 400;}.footer {padding-top: 20px;padding-left: 105px;background: url(/img/pdf-certificate/cert_pechat.jpg) no-repeat right bottom;width: 538px;}.h2 {margin-top: 0;margin-bottom: 21px;font-size: 36px;color: #6c81be;font-weight: 200;}.text {width: 492px;font-size: 18px;color: #000;line-height: 170%;padding-top: 30px;}.footer_text {width: 400px;color: #000;font-size: 15px;margin-bottom: 37px;}.podpis {width: 400px;color: #6c81be;font-size: 12px;}.podpis_text {height: 60px;margin-right: 9px;}.podpis img {vertical-align: middle;}',
                 // set mPDF properties on the fly
                 'options' => ['title' => 'Заголовок'],
-                // call mPDF methods on the fly
-                // 'methods' => [
-                //    'SetHeader' => ['<img src="' . \app\helpers\MainHelper::get_template_base_url() . '/img/logo.jpg" class="logo" />'],
-                //    'SetFooter' => ['<div class="centered">Страница {PAGENO}</div>'],
-                // ]
-                // 'marginLeft' => 0,
-                // 'marginRight' => 0,
-                // 'marginTop' => 0,
-                // 'marginBottom' => 0,
-                // 'marginHeader' => 0,
-                // 'marginFooter' => 0,
             ]);
             return $pdf->render();
         }

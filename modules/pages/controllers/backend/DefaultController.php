@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace app\modules\pages\controllers\backend;
 
 use app\modules\admin\components\DeepAdminController;
@@ -23,7 +25,8 @@ class DefaultController extends DeepAdminController
             if (in_array($model, ['.', '..'])) {
                 continue;
             }
-            $extension = end(explode('.', $model));
+            $models = explode('.', $model);
+            $extension = end($models);
             if ($extension != 'php') {
                 continue;
             }

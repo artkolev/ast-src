@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 /**
  * @modelDescr Страница-каталог услуг (модуль service)
  */

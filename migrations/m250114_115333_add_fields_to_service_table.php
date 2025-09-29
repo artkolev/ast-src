@@ -5,9 +5,6 @@ declare(strict_types=1);
 use app\modules\service\models\Service;
 use yii\db\Migration;
 
-/**
- * Class m250114_115333_add_fields_to_service_table
- */
 class m250114_115333_add_fields_to_service_table extends Migration
 {
     /**
