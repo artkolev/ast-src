@@ -1,0 +1,96 @@
+<?php
+
+use app\modules\pages\models\QueriesListMks;
+use yii\helpers\Url;
+
+$queries_list = QueriesListMks::find()->where(['model' => QueriesListMks::class, 'visible' => 1])->one();
+$queries_url = (!empty($queries_list)) ? $queries_list->getUrlPath() : false;
+?>
+    <main class="sec content_sec gray_bg">
+        <div class="container wide lk-container">
+            <div class="lk_maincol">
+                <?php if ($queries_url) { ?>
+                    <a href="<?= $queries_url; ?>" class="button-o back">Вернуться к запросам</a>
+                <?php } ?>
+
+                <div class="lk_order_item">
+                    <div class="lk_order_item_info-basic">
+                        <div class="grid-template-a">
+                            <div><h4>Запрос №:</h4>
+                                <p><?= $query->queryNum; ?></p></div>
+                            <div><h4>Отправлен:</h4>
+                                <p><?= Yii::$app->formatter->asDatetime($query->created_at, 'd.MM.y'); ?></p></div>
+                        </div>
+                        <div class="grid-template-b">
+                            <div><h4>Статус:</h4>
+                                <p class="maroon"><?= $query->statusName; ?></p></div>
+                            <div><h4>Клиент:</h4>
+                                <p><?= $query->user->profile->halfname; ?></p></div>
+                            <div><h4>Эксперт:</h4>
+                                <p><?= $query->executor->profile->halfname; ?></p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lk_block">
+                    <main class="lk_content lk_content-basic">
+                        <p>Услуга:</p>
+                        <h4><?= $query->service_name; ?></h4>
+                        <?= !empty($query->service_descr) ? '<h4>' . $query->service_descr . '</h4>' : ''; ?>
+                        <?php if (!empty($query->user_comment)) { ?>
+                            <p>Комментарий:</p>
+                            <h5><?= $query->user_comment; ?></h5>
+                        <?php } ?>
+                        <a href="#" class="button lk maroon reflect_status" data-action="close"
+                           data-query="<?= $query->id; ?>">Закрыть запрос</a>
+                        <a href="#" class="button lk darkgreen reflect_status" data-action="offer"
+                           data-query="<?= $query->id; ?>">Предложить альтернативы</a>
+                    </main>
+                </div>
+                <?= \app\modules\message\widgets\message\MessageWidget::widget(['query' => $query]); ?>
+            </div>
+            <?= app\modules\users\widgets\profile\MksmenuWidget::widget(); ?>
+        </div>
+    </main>
+    <div class="modal" id="success_queries_modal">
+        <div class="modal_content">
+            <a href="#" class="modal_close">x</a>
+            <div class="success_box">
+                <div class="modal_title">Изменение запроса</div>
+                <p>При изменении запроса возникла ошибка.</p>
+                <div class="modal_buttons">
+                    <a href="#" class="button small close_modal">ОК</a>
+                </div>
+            </div>
+        </div>
+        <div class="modal_overlay"></div>
+    </div>
+<?php
+$url_queries_close = Url::toRoute(['/pages/queries/closequery']);
+$js = <<<JS
+    $('body').on('click','.reflect_status', function(e){
+        e.preventDefault();
+        let query = $(this).data('query');
+        let param = yii.getCsrfParam();
+        let token = yii.getCsrfToken();
+        let action = $(this).data('action');
+        $.ajax({
+            type: 'POST',
+            url: '{$url_queries_close}',
+            processData: true,
+            dataType: 'json',
+            data: {query:query,param:token,action:action},
+            success: function(data){
+                if (data.status == 'success') {
+                    window.location.href = window.location.href;
+                } else {
+                    // в случае ошибки вывести сообщение
+                    $('#success_queries_modal .success_box p').html(data.message);
+                    modalPos('#success_queries_modal');
+                }
+            }
+        });
+    });
+JS;
+
+$this->registerJs($js);
+?>

@@ -1,0 +1,16 @@
+<?php
+/**
+ * @modelDescr Страница Личного Кабинета - страница с формой переноса даты проведения мероприятия
+ */
+
+namespace app\modules\pages\models;
+
+class LKEventsChangeDate extends Page
+{
+    public static $name_for_list = "страницу Переноса мероприятия в ЛК";
+    public static $count_for_list = 1;
+    public $accessLevel = 'none';
+    public $view = 'events_changedate';
+    public $action_id = 'pages/activities/eventschangedate';
+
+}
